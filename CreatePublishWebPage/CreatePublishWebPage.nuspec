@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>CreatePublishWebPage</id>
+    <version>1.0.0</version>
+    <authors>DiablosOffens</authors>
+    <owners>DiablosOffens</owners>
+    <licenseUrl>http://unlicense.org</licenseUrl>
+    <projectUrl>https://github.com/DiablosOffens/CreatePublishWebPage/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+Creates a web page which acts as the entry point to an installing user.
+Comparable to publish.htm generated from Visual Studio 2005 and later.
+This code was adapted from https://blogs.msdn.microsoft.com/mwade/2009/02/28/how-to-generate-publish-htm-with-msbuild/ .</description>
+    <copyright>Copyright (c) 2018</copyright>
+    <language>en-US</language>
+    <tags>MSBuild build tasks</tags>
+    <developmentDependency>true</developmentDependency>
+  </metadata>
+  <files>
+    <file src="bin\Debug\CreatePublishWebPage.*" target="tools" />
+    <file src="bin\Debug\CreatePublishWebPage.Targets" target="build\CreatePublishWebPageBuild.targets" />
+    <file src="**\*.cs" target="src" />
+  </files>
+</package>

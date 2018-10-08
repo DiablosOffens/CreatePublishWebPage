@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <CreatePublishWebPagePath Condition="'$(CreatePublishWebPagePath)' == '' and '$(MSBuildThisFile)' == 'CreatePublishWebPage.Targets'">$(MSBuildThisFileDirectory)</CreatePublishWebPagePath>
+    <CreatePublishWebPagePath Condition="'$(CreatePublishWebPagePath)' == '' and '$(MSBuildThisFile)' == 'CreatePublishWebPageBuild.targets'">$(MSBuildThisFileDirectory)\..\tools</CreatePublishWebPagePath>
+    <CreatePublishWebPageLib Condition="'$(OS)' == 'Windows_NT'">$([MSBUILD]::Unescape($(CreatePublishWebPagePath)\CreatePublishWebPage.dll))</CreatePublishWebPageLib>
+    <CreatePublishWebPageLib Condition="'$(OS)' != 'Windows_NT'">$(CreatePublishWebPagePath)\CreatePublishWebPage.dll</CreatePublishWebPageLib>
+    <CreatePublishWebPageLib Condition="!Exists('$(CreatePublishWebPageLib)')">CreatePublishWebPage.dll</CreatePublishWebPageLib>
+  </PropertyGroup>
+
+  <UsingTask AssemblyFile="$(CreatePublishWebPageLib)" TaskName="CreatePublishWebPage.CreatePublishWebPage" />
+</Project>
