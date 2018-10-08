@@ -19,7 +19,8 @@ This code was adapted from https://blogs.msdn.microsoft.com/mwade/2009/02/28/how
   </metadata>
   <files>
     <file src="bin\Debug\CreatePublishWebPage.*" target="tools" />
-    <file src="bin\Debug\CreatePublishWebPage.Targets" target="build\CreatePublishWebPageBuild.targets" />
-    <file src="**\*.cs" target="src" />
+    <file src="bin\Debug\CreatePublishWebPage.Targets" target="build\CreatePublishWebPage.targets" />
+    <file src="*.cs" target="src" />
+    <file src="Properties\*.cs" target="src" />
   </files>
 </package>
