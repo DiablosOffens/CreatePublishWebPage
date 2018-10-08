@@ -18,7 +18,9 @@ using Microsoft.Win32;
 namespace CreatePublishWebPage
 {
     /// <summary>
-    /// This code was adapted from https://blogs.msdn.microsoft.com/mwade/2009/02/28/how-to-generate-publish-htm-with-msbuild/
+    /// Creates a web page which acts as the entry point to an installing user. 
+    /// Comparable to publish.htm generated from Visual Studio 2005 and later.
+    /// This code was adapted from https://blogs.msdn.microsoft.com/mwade/2009/02/28/how-to-generate-publish-htm-with-msbuild/ .
     /// </summary>
     public class CreatePublishWebPage : Task
     {
@@ -67,33 +69,61 @@ namespace CreatePublishWebPage
             Weeks
         }
 
+        /// <summary>
+        /// The Application manifest for the ClickOnce application. Required parameter
+        /// </summary>
         [Required]
         public string ApplicationManifestFileName { get; set; }
 
+        /// <summary>
+        /// The Deployment manifest for the ClickOnce application. Required parameter
+        /// </summary>
         [Required]
         public string DeploymentManifestFileName { get; set; }
 
+        /// <summary>
+        /// True if a bootstrapper (setup.exe) is available to launch the installation
+        /// </summary>
         [Required]
         public bool BootstrapperEnabled { get; set; }
 
+        /// <summary>
+        /// The application prerequisites
+        /// </summary>
+        public ITaskItem[] BootstrapperPackages { get; set; }
+
+        /// <summary>
+        /// The path to xml template to use for the web page. 
+        /// A default template will be used if a template is not specified.
+        /// </summary>
+        public string TemplateFileName { get; set; }
+
+        /// <summary>
+        /// The file name to write the web page to.
+        /// </summary>
         [Required]
         public string OutputFileName { get; set; }
-
-        public ITaskItem[] BootstrapperPackages { get; set; }
 
         //public string Culture { get; set; }
 
         //public string FallbackCulture { get; set; }
 
-        public string TemplateFileName { get; set; }
-
         //TargetFramework is available in Project-Settings COM object from EnvDTE
         //public uint TargetFramework { get; set; }
+        /// <summary>
+        /// The runtime version for the application.
+        /// </summary>
         [Required]
         public string TargetFrameworkVersion { get; set; }
 
+        /// <summary>
+        /// The subset of the runtime version.
+        /// </summary>
         public string TargetFrameworkSubset { get; set; }
 
+        /// <summary>
+        /// The version of installed visual studio to load the default resources from.
+        /// </summary>
         public string VisualStudioVersion { get; set; }
 
         private DeployManifest deployManifest = null;
@@ -213,7 +243,8 @@ namespace CreatePublishWebPage
 
             //Version targetVersion = new Version(TargetFramework >> 16, TargetFramework & 0xffff, 0);
             Version targetVersion = new Version(TargetFrameworkVersion[0] == 'v' ? TargetFrameworkVersion.Substring(1) : TargetFrameworkVersion);
-            targetVersion = new Version(targetVersion.Major, targetVersion.Minor, 0);
+            if (targetVersion.Build == -1)
+                targetVersion = new Version(targetVersion.Major, targetVersion.Minor, 0);
             if (targetVersion == new Version(3, 5, 0))
             {
                 using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5", false))
@@ -234,6 +265,10 @@ namespace CreatePublishWebPage
             return targetVersion.ToString(3);
         }
 
+        /// <summary>
+        /// MSBuild entry point for executing the CreatePublishWebPage task
+        /// </summary>
+        /// <returns>true if the web page was created, otherwise false </returns>
         public override bool Execute()
         {
             PageData data = new PageData();
