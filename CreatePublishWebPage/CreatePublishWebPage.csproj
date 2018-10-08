@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\CreatePublishWebPage.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\CreatePublishWebPage.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -90,6 +92,11 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <NuGetPack ToolPath="..\.nuget" File="CreatePublishWebPage.nuspec" OutputDirectory="$(MSBuildProjectDirectory)" Version="1.0.0.0" Symbols="true" />
+    <TaskSchema Assemblies="$(OutputPath)\CreatePublishWebPage.dll"
+                OutputPath="$(OutputPath)"
+                CreateTaskList="false"
+                IgnoreMsBuildSchema="true"
+                Includes="Microsoft.Build.Commontypes.xsd"/>
+    <NuGetPack ToolPath="..\.nuget" File="CreatePublishWebPage.nuspec" OutputDirectory="$(OutputPath)" Version="1.0.0.3" Symbols="true" />
   </Target>
 </Project>
